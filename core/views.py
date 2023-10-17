@@ -1,8 +1,10 @@
+from django.http import JsonResponse
 from django.shortcuts import render
 from .forms import StudentForm
-# Create your views here.
+from .models import Student
 
 def home(request):
     form = StudentForm()
-    context = {'form': form}
+    student = Student.objects.all()
+    context = {'form': form, 'student': student}
     return render(request, 'core/home.html', context)
