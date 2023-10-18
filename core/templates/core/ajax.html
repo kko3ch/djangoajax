@@ -1,0 +1,50 @@
+<script>
+// Save data
+$('#btnsave').click(function(){
+    // console.log("Button Save clicked")
+    output = "";
+    let n = $('#nameid').val();
+    let e = $('#emailid').val();
+    let c = $('#courseid').val();
+
+    if(n == ""){
+        console.log("Please Enter Name");
+    }
+    else if(e == ""){
+        console.log("Please Enter Email");
+    }
+    else if(c == ""){
+        console.log("Please Enter Course");
+    }
+    else{
+        // console.log(n, e, c);
+        mydata = {name:n, email:e, course:c};
+        // console.log(mydata)
+        $.ajax({
+            url: "{% url 'save' %}",
+            method: "POST",
+            data: mydata,
+
+            success:function(data){
+                // console.log(data.status);
+                x = data.student_data;
+                if(data.status == 'Data Saved'){
+                    console.log('Data Submitted Successfully');
+                    for(i=0; i<x.length; i++){
+                        output += "<tr><td>" + x[i].id + 
+                            "</td><td>" + x[i].name +
+                            "</td><td>" + x[i].email +
+                            "</td><td>" + x[i].course +
+                            "</td><td> <input type='button' value='Edit' class='btn btn-warning btn-sm btn-edit' data-sid=" + x[i].id + "/> <input type='button' value='Delete' class='btn btn-danger btn-sm btn-del' data-sid=" + x[i].id + "/>"                             
+                    }
+                    $('#tbody').html(output);
+                    $('form')[0].reset();
+                }
+                if(data.status == 'Unable To Save'){
+                    console.log('Data Not Saved');
+                }                
+            }
+        });
+    }
+})
+</script>
