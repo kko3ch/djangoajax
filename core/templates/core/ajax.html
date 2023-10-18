@@ -3,6 +3,7 @@
 $('#btnsave').click(function(){
     // console.log("Button Save clicked")
     output = "";
+    let sid = $('#stuid').val();
     let n = $('#nameid').val();
     let e = $('#emailid').val();
     let c = $('#courseid').val();
@@ -18,7 +19,7 @@ $('#btnsave').click(function(){
     }
     else{
         // console.log(n, e, c);
-        mydata = {name:n, email:e, course:c};
+        mydata = {stuid:sid, name:n, email:e, course:c};
         // console.log(mydata)
         $.ajax({
             url: "{% url 'save' %}",
@@ -35,7 +36,7 @@ $('#btnsave').click(function(){
                             "</td><td>" + x[i].name +
                             "</td><td>" + x[i].email +
                             "</td><td>" + x[i].course +
-                            "</td><td> <input type='button' value='Edit' class='btn btn-warning btn-sm btn-edit' data-sid=" + x[i].id + "/> <input type='button' value='Delete' class='btn btn-danger btn-sm btn-del' data-sid=" + x[i].id + "/>"                             
+                            "</td><td> <input type='button' value='Edit' class='btn btn-warning btn-sm btn-edit' data-sid=" + x[i].id + "> <input type='button' value='Delete' class='btn btn-danger btn-sm btn-del' data-sid=" + x[i].id + ">"                             
                     }
                     $('#tbody').html(output);
                     $('form')[0].reset();
@@ -47,6 +48,7 @@ $('#btnsave').click(function(){
         });
     }
 })
+// delete function
 $('#tbody').on("click", ".btn-del", function(){
     console.log('Delete button clicked');
     let id = $(this).attr('data-sid');
@@ -72,4 +74,28 @@ $('#tbody').on("click", ".btn-del", function(){
         },
     })
 })
+
+// edit data
+$('#tbody').on("click", ".btn-edit", function(){
+    console.log('Edit button clicked');
+    let id = $(this).attr('data-sid');
+
+    mydata = {sid:id};
+    mythis = this;
+
+    $.ajax({
+        url: "{% url 'edit' %}",
+        method: "POST",
+        data: mydata,
+
+        success: function(data){
+            // console.log(data);
+            $('#stuid').val(data.id);
+            $('#nameid').val(data.name);
+            $('#emailid').val(data.email);
+            $('#courseid').val(data.course);
+        },
+    })
+})
+
 </script>

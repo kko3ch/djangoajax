@@ -15,11 +15,17 @@ def save_data(request):
     if request.method == "POST":
         form = StudentForm(request.POST)
         if form.is_valid():
+            sid = request.POST.get('stuid')
             name = request.POST['name']
             email = request.POST['email']
             course = request.POST['course']
 
-            s = Student(name=name, email=email, course=course)
+            if(sid == ''):
+                s = Student(name=name, email=email, course=course)
+            else:
+                s = Student(id=sid, name=name, email=email, course=course)
+
+            # s = Student(name=name, email=email, course=course)
             s.save()
             stu = Student.objects.values()
             student_data = list(stu)
@@ -39,3 +45,16 @@ def delete_data(request):
         return JsonResponse({'status':1})
     else:
         return JsonResponse({'status':0})
+
+@csrf_exempt
+def edit_data(request):
+    if request.method == 'POST':
+        id = request.POST.get('sid')
+        student = Student.objects.get(pk=id)
+        student_data = {
+            'id': student.id,
+            'name':student.name,
+            'email':student.email,
+            'course':student.course
+        }
+        return JsonResponse(student_data)
