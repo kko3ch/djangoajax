@@ -41,8 +41,8 @@
                             <td>{{ st.email }}</td>
                             <td>{{ st.course }}</td>
                             <td>
-                                <input type="button" value="Edit" class="btn btn-warning btn-sm btn-edit" data-sid="">
-                                <input type="button" value="Delete" class="btn btn-danger btn-sm btn-del" data-sid="">
+                                <input type="button" value="Edit" class="btn btn-warning btn-sm btn-edit" data-sid="{{ st.id }}">
+                                <input type="button" value="Delete" class="btn btn-danger btn-sm btn-del" data-sid="{{ st.id }}">
                             </td>
                         </tr>
                         {% endfor %}

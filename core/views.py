@@ -28,3 +28,14 @@ def save_data(request):
         
         else: 
             return JsonResponse({'status': 'Unable To Save'})
+
+@csrf_exempt
+def delete_data(request):
+    if request.method == 'POST':
+        id = request.POST.get('sid')
+        st = Student.objects.get(pk=id)
+        st.delete()
+
+        return JsonResponse({'status':1})
+    else:
+        return JsonResponse({'status':0})
